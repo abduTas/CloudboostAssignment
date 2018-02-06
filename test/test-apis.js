@@ -1,29 +1,27 @@
-var supertest =require('supertest');
-var chai =require ('chai');
-var chaiHttp = require('chai-http')
-var should = chai.should();
-var server =require('../app.js');
-var request=require('request');
-var expect    = require("chai").expect;
-var config =require("../config/config");
-var querystring =require("querystring");
-// var cookieParser = require('cookie-parser');
-// var loginHelper = require('../loginhelper');
+const supertest =require('supertest');
+const chai =require ('chai');
+const chaiHttp = require('chai-http')
+const should = chai.should();
+const server =require('../app.js');
+const request=require('request');
+const expect    = require("chai").expect;
+const config =require("../config/config");
+const querystring =require("querystring");
 
 describe("Server",(req,res)=>{
-	var token
+	var token ;
 	describe("Auth Testing",(req,res)=>{
 
 		it("authApiTestingPositive",(done)=>{
-			var uri = config.appUrl +config.auth
-			var username = "Abdulla"
-			var password = "Tasleem"
-			var formdata = {username:username,password:password}
-			var headers = {
+			let uri = config.appUrl +config.auth
+			let username = "Abdulla"
+			let password = "Tasleem"
+			let formdata = {username:username,password:password}
+			let headers = {
 	            'Content-Length': querystring.stringify(formdata).length,
 	            'Content-Type': 'application/x-www-form-urlencoded'
           	}
-          	var requestoptions = {}
+          	let requestoptions = {}
 		 	requestoptions.uri = uri
 		 	requestoptions.body = querystring.stringify(formdata)
 		 	requestoptions.method = "post"
@@ -33,7 +31,7 @@ describe("Server",(req,res)=>{
 		    	if(err){
 		    		console.log("err"+err)
 		    	}
-		    	var parsedbody = JSON.parse(body)
+		    	let parsedbody = JSON.parse(body)
 		    	token = parsedbody.token
 				console.log(body+"here"+JSON.stringify(parsedbody))
 				response.should.have.property('statusCode').eql(200);
@@ -45,14 +43,14 @@ describe("Server",(req,res)=>{
 			})
 		})
 		it("authApiTestingNegative",(done)=>{
-			var uri = config.appUrl +config.auth
-			var username = "Abdulla"
-			var formdata = {username:username}
-			var headers = {
+			let uri = config.appUrl +config.auth
+			let username = "Abdulla"
+			let formdata = {username:username}
+			let headers = {
 	            'Content-Length': querystring.stringify(formdata).length,
 	            'Content-Type': 'application/x-www-form-urlencoded'
           	}
-          	var requestoptions = {}
+          	let requestoptions = {}
 		 	requestoptions.uri = uri
 		 	requestoptions.body = querystring.stringify(formdata)
 		 	requestoptions.method = "post"
@@ -62,7 +60,7 @@ describe("Server",(req,res)=>{
 		    	if(err){
 		    		console.log("err"+err)
 		    	}
-		    	var parsedbody = JSON.parse(body)
+		    	let parsedbody = JSON.parse(body)
 				console.log(body+"here"+JSON.stringify(response))
 				parsedbody.should.have.property('statusCode').to.not.equal(200);
 		 		response.should.be.a('object');
@@ -74,8 +72,8 @@ describe("Server",(req,res)=>{
 
 	describe("testing applyPatch ",(req,res)=>{
 		it("verifyApplyPatchApiPositive",(done)=>{
-			var uri  = config.appUrl+config.applyPatch
-		 	var postData = {
+			let uri  = config.appUrl+config.applyPatch
+		 	let postData = {
 					jsonObject:{
 					"name":"abdulla",
 					"surname":"tasleem",
@@ -84,7 +82,7 @@ describe("Server",(req,res)=>{
 					jsonPatchObject:{op: 'add', path: '/foo', value: 'bar'},
 					token:token
 					}
-		 	var options = {
+		 	let options = {
 			  method: 'post',
 			  body: postData,
 			  json: true,
@@ -102,8 +100,8 @@ describe("Server",(req,res)=>{
 		})
 
 		it("verifyApplyPatchApiNegative",(done)=>{
-			var uri  = config.appUrl+config.applyPatch
-		 	var postData = {
+			let uri  = config.appUrl+config.applyPatch
+		 	let postData = {
 					jsonObject:{
 					"name":"abdulla",
 					"surname":"tasleem",
@@ -111,7 +109,7 @@ describe("Server",(req,res)=>{
 					"op":"add"},
 					jsonPatchObject:{op: 'add', path: '/foo', value: 'bar'},
 					}
-		 	var options = {
+		 	let options = {
 			  method: 'post',
 			  body: postData,
 			  json: true,
@@ -134,14 +132,14 @@ describe("Server",(req,res)=>{
 	describe("Testing downloadFile APi ",(req,res)=>{
 
 		it("downloadFileApiTestingPositive",(done)=>{
-			var url = config.appUrl +config.downloadImage
-			var uri = "https://www.google.com/images/srpr/logo3w.png"
-			var formdata = {uri:uri}
-			var headers = {
+			let url = config.appUrl +config.downloadImage
+			let uri = "https://www.google.com/images/srpr/logo3w.png"
+			let formdata = {uri:uri}
+			let headers = {
 	            'Content-Type': 'application/x-www-form-urlencoded',
 	            'x-access-token' : token
           	}
-          	var requestoptions = {}
+          	let requestoptions = {}
 		 	requestoptions.url = url
 		 	requestoptions.method = "post"
 		 	requestoptions.headers = headers
@@ -150,7 +148,7 @@ describe("Server",(req,res)=>{
 		    	if(err){
 		    		console.log("err"+err)
 		    	}
-		    	var parsedbody = JSON.parse(body)
+		    	let parsedbody = JSON.parse(body)
 
 				response.should.have.property('statusCode').eql(200);
 		 		response.should.be.a('object');

@@ -1,16 +1,16 @@
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var jwt = require('jsonwebtoken')
-var fs = require('fs')
-var im = require('imagemagick')
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken')
+const fs = require('fs')
+const im = require('imagemagick')
 
-var request = require('request')
-var app = express();
-var jsonPatch = require("json-patch")
-var router = express.Router();
-var userController = require('./controllers/users');
-var config = require('./config/config.js')
+const request = require('request')
+const app = express();
+const jsonPatch = require("json-patch")
+const router = express.Router();
+const userController = require('./controllers/users');
+const config = require('./config/config.js')
 
 //Body parser for getting form data
 

@@ -1,14 +1,14 @@
-var config = require('../config/config.js')
+const config = require('../config/config.js')
 
-exports.getRegistration = function(jwt,passcode){
-	return function(req,res,next){
-	var username = req.body.username;
-	var password  = req.body.password
+exports.getRegistration = (jwt,passcode)=>{
+	return (req,res,next)=>{
+	let username = req.body.username;
+	let password  = req.body.password
 	if(username == undefined || username == null || password== undefined || password == null)
 		 res.json({ statusCode:404, message: 'username/password not provided' }); 
 	else{	  
-		var user = {username:username,password:password}
-		var token = jwt.sign({user:user}, passcode, {
+		let user = {username:username,password:password}
+		let token = jwt.sign({user:user}, passcode, {
 	          expiresIn: 1000
 	        });
 	
@@ -23,10 +23,10 @@ exports.getRegistration = function(jwt,passcode){
  } 
 }
 
-exports.verifyLogin = function(jwt,passcode){
-	return function(req,res,next){
-		var token = req.body.token || req.query.token || req.headers['x-access-token'];
-		jwt.verify(token,passcode,function(err,decoded){
+exports.verifyLogin = (jwt,passcode)=>{
+	return (req,res,next)=>{
+		let token = req.body.token || req.query.token || req.headers['x-access-token'];
+		jwt.verify(token,passcode,(err,decoded)=>{
 			if(err){
 				return res.json({ statusCode:404,message: 'Failed to authenticate token.' });    
 			}
@@ -37,11 +37,11 @@ exports.verifyLogin = function(jwt,passcode){
 	}
 }
 
-exports.applyPatch = function(jsonPatch,config){
-	return function(req,res,next){
+exports.applyPatch = (jsonPatch,config)=>{
+	return (req,res,next)=>{
 		console.log("patch ",req.body)
-		var obj = req.body.jsonObject
-		var patch  = req.body.jsonPatchObject
+		let obj = req.body.jsonObject
+		let patch  = req.body.jsonPatchObject
 		jsonPatch.apply(obj, [patch]);
 		res.json({
 			statusCode:200,
@@ -51,14 +51,14 @@ exports.applyPatch = function(jsonPatch,config){
 	}
 }
 
-exports.downloadFileFromUrl = function(request,im,fs){
-	return function(req,res,next){
-		var uri = req.body.uri
+exports.downloadFileFromUrl = (request,im,fs)=>{
+	return (req,res,next)=>{
+		let uri = req.body.uri
 		if(uri == null){
 			uri = config.imageUrl
 		}
-		var download = function(uri, filename, callback){
-		  request.head(uri, function(err, res, body){
+		let download = (uri, filename, callback)=>{
+		  request.head(uri, (err, res, body)=>{
 		    console.log('content-type:', res.headers['content-type']);
 		    console.log('content-length:', res.headers['content-length']);
 
@@ -66,14 +66,14 @@ exports.downloadFileFromUrl = function(request,im,fs){
 		  });
 		};
 
-		download(uri, 'google.png', function(){
+		download(uri, 'google.png', ()=>{
 		    console.log('downloaded file');
 			im.resize({
 			  srcPath: './google.png',
 			  dstPath: 'google.png',
 			  width: 50,
 			  height:50
-			}, function(err, stdout){
+			}, (err, stdout)=>{
 			  if (err) throw err;
 			  console.log('resized image to fit 50*50');
 			  res.json({
