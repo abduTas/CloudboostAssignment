@@ -1,9 +1,9 @@
 var config = require('../config/config.js')
+
 exports.getRegistration = function(jwt,passcode){
 	return function(req,res,next){
 	var username = req.body.username;
 	var password  = req.body.password
-	console.log(username + " " + password)
 	if(username == undefined || username == null || password== undefined || password == null)
 		 res.json({ statusCode:404, message: 'username/password not provided' }); 
 	else{	  
@@ -26,12 +26,10 @@ exports.getRegistration = function(jwt,passcode){
 exports.verifyLogin = function(jwt,passcode){
 	return function(req,res,next){
 		var token = req.body.token || req.query.token || req.headers['x-access-token'];
-		console.log("token",token)
 		jwt.verify(token,passcode,function(err,decoded){
 			if(err){
 				return res.json({ statusCode:404,message: 'Failed to authenticate token.' });    
 			}
-			console.log("decoded",decoded)
         // if everything is good, save to request for use in other routes
         req.decoded = decoded;    
          next();
@@ -45,7 +43,6 @@ exports.applyPatch = function(jsonPatch,config){
 		var obj = req.body.jsonObject
 		var patch  = req.body.jsonPatchObject
 		jsonPatch.apply(obj, [patch]);
-		console.log("patch ",patch+ "res",obj)
 		res.json({
 			statusCode:200,
 			message:"result after applying patch",
@@ -60,7 +57,6 @@ exports.downloadFileFromUrl = function(request,im,fs){
 		if(uri == null){
 			uri = config.imageUrl
 		}
-		console.log("uri"+uri)		
 		var download = function(uri, filename, callback){
 		  request.head(uri, function(err, res, body){
 		    console.log('content-type:', res.headers['content-type']);

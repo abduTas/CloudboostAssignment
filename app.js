@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken')
 var fs = require('fs')
 var im = require('imagemagick')
-var sharp = require('sharp');
 
 var request = require('request')
 var app = express();

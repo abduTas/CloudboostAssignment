@@ -94,8 +94,6 @@ describe("Server",(req,res)=>{
 		    	if(err){
 		    		console.log("err"+err)
 		    	}
-		    	console.log(body)
-				console.log(body+"here"+JSON.stringify(body))
 				response.should.have.property('statusCode').eql(200);
 		 		response.should.be.a('object');
 		 		body['data'].should.have.property('foo')
@@ -123,7 +121,6 @@ describe("Server",(req,res)=>{
 		    	if(err){
 		    		console.log("err"+err)
 		    	}
-				console.log(body+"here"+JSON.stringify(body))
 				response.should.have.property('statusCode').to.equal(200);
 		 		response.should.be.a('object');
 		 		body.should.not.have.property('data')
@@ -148,7 +145,6 @@ describe("Server",(req,res)=>{
 		 	requestoptions.url = url
 		 	requestoptions.method = "post"
 		 	requestoptions.headers = headers
-		 	console.log("req",requestoptions)
 
           	request(requestoptions, function(err, response, body) {
 		    	if(err){
@@ -156,7 +152,6 @@ describe("Server",(req,res)=>{
 		    	}
 		    	var parsedbody = JSON.parse(body)
 
-				console.log(response +body+"here"+JSON.stringify(response))
 				response.should.have.property('statusCode').eql(200);
 		 		response.should.be.a('object');
 		 		response.should.have.property('body');
@@ -175,7 +170,6 @@ describe("Server",(req,res)=>{
 				method:'get'
 			}
 			request(requestoptions,function(err,response,body){
-				console.log(response)
 				response.should.not.have.property('message')
 				done();
 			})
