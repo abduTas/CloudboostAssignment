@@ -10,9 +10,10 @@ var request = require('request')
 var app = express();
 var jsonPatch = require("json-patch")
 var router = express.Router();
-var userController = require('./routes/users');
+var userController = require('./controllers/users');
 var config = require('./config/config.js')
 
+//Body parser for getting form data
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,37 +33,17 @@ router.route('/login')
 router.route('/applyPatch')
 	.post(userController.verifyLogin(jwt,config.passcode),userController.applyPatch(jsonPatch,config))	
 
-router.route('/download')
-	.get(function(req,res,next){
-		var download = function(uri, filename, callback){
-		  request.head(uri, function(err, res, body){
-		    console.log('content-type:', res.headers['content-type']);
-		    console.log('content-length:', res.headers['content-length']);
-
-		    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-		  });
-		};
-
-		download('https://www.google.com/images/srpr/logo3w.png', 'google.png', function(){
-		  console.log('downloaded');
-		im.resize({
-		  srcPath: './google.png',
-		  dstPath: 'google-mini.png',
-		  width: 50,
-		  height:50
-		}, function(err, stdout, stderr){
-		  if (err) throw err;
-		  console.log('resized image to fit 50*50');
-		});
-
-		});
-	})
+router.route('/downloadImage')
+	.post(userController.verifyLogin(jwt,config.passcode),userController.downloadFileFromUrl(request,im,fs))
 
 
 app.use('/', router);
-// app.use('/users', users);
+
 app.all('*', function(req, res) {
-  res.send("wrong route ERROR 404");
+  res.json({message:"wrong route ERROR 404"});
 });
-app.listen(8000);
-console.log('Server started on port 8000');
+var server = app.listen(8000,function(){
+	console.log('Server started on port 8000');
+});
+
+module.exports = server
